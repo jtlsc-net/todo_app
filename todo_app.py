@@ -3,6 +3,7 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 
 from Task_Widget import *
+from Column_Widget import *
 
 class Tasks_List():
     def __init__(self, task_list: list=[]):
@@ -37,31 +38,35 @@ class MainWindow(QMainWindow):
         self.done_layout = QVBoxLayout()
 
         for count, task in enumerate(todo_list.get_task_list()):
-            self.todo_layout.addWidget(Todo_Widget(task))
+            self.todo_layout.addWidget(Task_Widget(0, task))
             if count == 4:
                 break
         
         for count, task in enumerate(doing_list.get_task_list()):
-            self.doing_layout.addWidget(Doing_Widget(task))
+            self.doing_layout.addWidget(Task_Widget(1, task))
 
         for count, task in enumerate(done_list.get_task_list()):
-            self.done_layout.addWidget(Done_Widget(task))
-
+            self.done_layout.addWidget(Task_Widget(2, task))
         
-        todo_widget = QWidget()
+        todo_widget = Column_Widget()
         todo_widget.setObjectName("todo_box")
         todo_widget.setStyleSheet("QWidget#todo_box { border: 1px solid black; border-radius: 15px;}")
         todo_widget.setLayout(self.todo_layout)
 
-        doing_widget = QWidget()
+        doing_widget = Column_Widget()
         doing_widget.setObjectName("doing_box")
         doing_widget.setStyleSheet("QWidget#doing_box { border: 1px solid black; border-radius: 15px;}")
         doing_widget.setLayout(self.doing_layout)
 
-        done_widget = QWidget()
+        done_widget = Column_Widget()
         done_widget.setObjectName("done_box")
         done_widget.setStyleSheet("QWidget#done_box { border: 1px solid black; border-radius: 15px;}")
         done_widget.setLayout(self.done_layout)
+
+        todo_widget.set_right(doing_widget)
+        doing_widget.set_left(todo_widget)
+        doing_widget.set_right(done_widget)
+        done_widget.set_left(doing_widget)
 
         self.h_layout.addWidget(todo_widget)
         self.h_layout.addWidget(doing_widget)
